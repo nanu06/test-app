@@ -4,9 +4,10 @@ import { addTask } from '../redux/tasksSlice';
 import { TextField, Button } from '@mui/material';
 
 const TaskInput = () => {
+  // Setting States to store tasks
   const [task, setTask] = useState('');
   const dispatch = useDispatch();
-
+  // Function to add new task when submitted by the user
   const handleSubmit = (e) => {
     e.preventDefault();
     if (task.trim()) {
