@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteTask, toggleTask } from '../redux/tasksSlice';
-import EditTaskPopup from './EditTaskPopup';
-import { ListGroup, Button, ButtonGroup } from 'react-bootstrap';
+import { deleteTask, toggleTask, editTask } from '../redux/tasksSlice';
+import { ListItem, ListItemText, ListItemSecondaryAction, IconButton, Checkbox, TextField } from '@mui/material';
+import { Delete, Edit, Save } from '@mui/icons-material';
 
 const TaskItem = ({ task }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(task.text);
 
   const handleDelete = () => {
     dispatch(deleteTask(task.id));
@@ -16,26 +17,46 @@ const TaskItem = ({ task }) => {
     dispatch(toggleTask(task.id));
   };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    dispatch(editTask({ id: task.id, text: editedText }));
+    setIsEditing(false);
+  };
+
   return (
-    <ListGroup.Item
-      className={`d-flex justify-content-between align-items-center ${task.completed ? 'bg-light' : ''}`}
-    >
-      <span
-        onClick={handleToggle}
-        style={{ textDecoration: task.completed ? 'line-through' : 'none', cursor: 'pointer' }}
-      >
-        {task.text}
-      </span>
-      <ButtonGroup>
-        <Button variant="warning" size="sm" onClick={() => setIsEditing(true)}>
-          Edit
-        </Button>
-        <Button variant="danger" size="sm" onClick={handleDelete}>
-          Delete
-        </Button>
-      </ButtonGroup>
-      {isEditing && <EditTaskPopup task={task} onClose={() => setIsEditing(false)} />}
-    </ListGroup.Item>
+    <ListItem divider button onClick={handleToggle}>
+      <Checkbox checked={task.completed} />
+      {isEditing ? (
+        <TextField
+          value={editedText}
+          onChange={(e) => setEditedText(e.target.value)}
+          autoFocus
+          fullWidth
+          variant="standard"
+        />
+      ) : (
+        <ListItemText primary={task.text} style={{ textDecoration: task.completed ? 'line-through' : 'none' }} />
+      )}
+      <ListItemSecondaryAction>
+        {isEditing ? (
+          <IconButton edge="end" aria-label="save" onClick={handleSave}>
+            <Save />
+          </IconButton>
+        ) : (
+          <>
+            <IconButton edge="end" aria-label="edit" onClick={handleEdit}>
+              <Edit />
+            </IconButton>
+            <IconButton edge="end" aria-label="delete" onClick={handleDelete}>
+              <Delete />
+            </IconButton>
+          </>
+        )}
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 };
 

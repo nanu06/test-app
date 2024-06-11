@@ -5,7 +5,7 @@ import tasksReducer, { storeSubscribe } from './tasksSlice';
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem('tasks');
-    return serializedState ? JSON.parse(serializedState) : undefined;
+    return serializedState ? { tasks: JSON.parse(serializedState) } : undefined;
   } catch (e) {
     console.error(e);
     return undefined;

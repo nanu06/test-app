@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTask } from '../redux/tasksSlice';
-import { Button, Form, FormControl } from 'react-bootstrap';
+import { TextField, Button } from '@mui/material';
 
 const TaskInput = () => {
   const [task, setTask] = useState('');
@@ -16,18 +16,18 @@ const TaskInput = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="mb-4">
-      <FormControl
-        type="text"
+    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+      <TextField
+        label="Add a new task"
+        variant="outlined"
         value={task}
         onChange={(e) => setTask(e.target.value)}
-        placeholder="Add a new task"
-        className="mr-2"
+        fullWidth
       />
-      <Button type="submit" variant="primary" className="mt-2">
+      <Button type="submit" variant="contained" color="primary" style={{ marginTop: '10px' }}>
         Add Task
       </Button>
-    </Form>
+    </form>
   );
 };
 
